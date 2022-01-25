@@ -2,6 +2,7 @@ package api
 
 import (
 	"GinExample/requests"
+	"GinExample/services/hello"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,8 +20,19 @@ func Test(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"error": requests.Translate(err)})
 		return
 	}
+
+	// 调用HelloService
+	var service hello.HelloContract
+
+	// 这里使用的是接口定义了变量
+	// service = &hello.HelloService{}
+	service = &hello.GreeterService{}
+	// 调用服务的方法处理业务
+	// result := service.SayHello(testStruct.Username)
+	result := service.SayHello(testStruct.Username)
+
 	// 校验通过，返回请求参数
-	c.JSON(http.StatusOK, gin.H{"params": testStruct})
+	c.JSON(http.StatusOK, gin.H{"data": result})
 }
 
 // func GetHandler(c *gin.Context) {
